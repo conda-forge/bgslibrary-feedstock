@@ -1,4 +1,4 @@
-{% set version = "3.2.0" %}
+{% set version = "3.3.0" %}
 
 package:
   name: bgslibrary
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/andrewssobral/bgslibrary/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 51f5588c91ce91faac2eb3f7cd653d960b8da2dec90531496a699f332a71b79e
+  sha256: 78fef569177be3476c2a817a7f0a26f2e0588665915b66052f06f1989279eb28
   patches:
     - 0001-find-pybind.patch
     - 0002-fix-unsupported-cmake-flag.patch                      # [win]
@@ -17,11 +17,12 @@ build:
 
 outputs:
   - name: bgslibrary
-    script: build_cli.sh   # [unix]
-    script: bld_cli.bat    # [win]
+    script: build_cli.sh  # [unix]
+    script: bld_cli.bat  # [win]
     requirements:
       build:
         - {{ compiler("c") }}
+        - {{ stdlib("c") }}
         - {{ compiler("cxx") }}
         - cmake
         - make  # [not win]
@@ -33,11 +34,12 @@ outputs:
         - bgslibrary -h
 
   - name: bgslibrary_gui
-    script: build_gui.sh   # [unix]
+    script: build_gui.sh  # [unix]
     script: bld_gui.bat  # [win]
     requirements:
       build:
         - {{ compiler("c") }}
+        - {{ stdlib("c") }}
         - {{ compiler("cxx") }}
         - {{ cdt('mesa-libgl-devel') }}       # [linux] 
         - cmake
@@ -50,19 +52,19 @@ outputs:
       commands:
         - test -f $PREFIX/bin/bgslibrary_gui   # [not win]
         - IF NOT EXIST %LIBRARY_BIN%/bgslibrary_gui.exe exit 1  # [win]
-      
   - name: pybgs
-    script: build_py.sh   # [unix]
-    script: bld_py.bat    # [win]
+    script: build_py.sh  # [unix]
+    script: bld_py.bat  # [win]
     requirements:
       build:
         - {{ compiler("c") }}
+        - {{ stdlib("c") }}
         - {{ compiler("cxx") }}
         - {{ cdt('mesa-libgl-devel') }}       # [linux] 
         - cmake
         - make  # [not win]
         - ninja  # [win]
-      host: 
+      host:
         - python
         - pip
         - setuptools
