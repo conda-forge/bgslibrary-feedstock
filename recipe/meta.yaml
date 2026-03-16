@@ -13,12 +13,12 @@ source:
     - 0003-add-reference-to-FindPythonPyEnv-hack-for-mac.patch   # [osx]
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - name: bgslibrary
-    script: build_cli.sh   # [unix]
-    script: bld_cli.bat    # [win]
+    script: build_cli.sh  # [unix]
+    script: bld_cli.bat  # [win]
     requirements:
       build:
         - {{ compiler("c") }}
@@ -33,41 +33,40 @@ outputs:
         - bgslibrary -h
 
   - name: bgslibrary_gui
-    script: build_gui.sh   # [unix]
+    script: build_gui.sh  # [unix]
     script: bld_gui.bat  # [win]
     requirements:
       build:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
-        - {{ cdt('mesa-libgl-devel') }}       # [linux] 
         - cmake
         - make  # [not win]
         - ninja  # [win]
       host:
         - libopencv
         - qt-main >=5.15
+        - libgl-devel                         # [linux] 
     test:
       commands:
         - test -f $PREFIX/bin/bgslibrary_gui   # [not win]
         - IF NOT EXIST %LIBRARY_BIN%/bgslibrary_gui.exe exit 1  # [win]
-      
   - name: pybgs
-    script: build_py.sh   # [unix]
-    script: bld_py.bat    # [win]
+    script: build_py.sh  # [unix]
+    script: bld_py.bat  # [win]
     requirements:
       build:
         - {{ compiler("c") }}
         - {{ compiler("cxx") }}
-        - {{ cdt('mesa-libgl-devel') }}       # [linux] 
         - cmake
         - make  # [not win]
         - ninja  # [win]
-      host: 
+      host:
         - python
         - pip
         - setuptools
         - libopencv
         - pybind11
+        - libgl-devel                         # [linux] 
       run:
         - python
     test:
