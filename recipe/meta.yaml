@@ -13,7 +13,7 @@ source:
     - 0003-add-reference-to-FindPythonPyEnv-hack-for-mac.patch   # [osx]
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - name: bgslibrary
